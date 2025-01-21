@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -14,6 +15,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.nizek.common.hide
+import com.nizek.common.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -23,12 +26,8 @@ class ProductSearchFragment : Fragment() {
     private val TAG = "ProductSearchFragment"
     lateinit var searchField: EditText
     lateinit var recyclerView: RecyclerView
-    lateinit var progressIndicator: CircularProgressIndicator
+    lateinit var progressIndicator: ProgressBar
     private lateinit var productAdapter: ProductSearchAdapter
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,16 +56,21 @@ class ProductSearchFragment : Fragment() {
                 viewModel.uiState.collect {
                     when(it) {
                         is ProductUiState.Loading -> {
-                            progressIndicator.visibility = View.VISIBLE
+                            progressIndicator.show()
                         }
                         is ProductUiState.Error -> {
-                            progressIndicator.visibility = View.GONE
+                            progressIndicator.hide()
                             Log.e(TAG, "handleSearch: ${it.message}")
                         }
                         is ProductUiState.Success -> {
-                            progressIndicator.visibility = View.GONE
+                            progressIndicator.hide()
                             Log.d(TAG, "handleSearch: ${it.list}")
                             productAdapter.submitList(it.list)
+                        }
+
+                        ProductUiState.Idle -> {
+                            progressIndicator.hide()
+                            productAdapter.submitList(emptyList())
                         }
                     }
                 }

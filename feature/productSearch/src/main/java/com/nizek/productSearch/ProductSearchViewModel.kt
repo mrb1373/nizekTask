@@ -17,7 +17,7 @@ class ProductSearchViewModel @Inject constructor(
     private val productSearchRepository: ProductSearchRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<ProductUiState>(ProductUiState.Loading)
+    private val _uiState = MutableStateFlow<ProductUiState>(ProductUiState.Idle)
     val uiState: StateFlow<ProductUiState> = _uiState
     private val searchQuery = MutableStateFlow("")
 
@@ -43,6 +43,8 @@ class ProductSearchViewModel @Inject constructor(
                         _uiState.emit(ProductUiState.Error(it.message ?: "Unknown error"))
                     }
                 }
+            } else {
+                _uiState.emit(ProductUiState.Idle)
             }
         }
     }
