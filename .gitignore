@@ -11,7 +11,13 @@
 /build
 /.idea
 /.idea/*
+.idea
+.idea/gradle.xml
+.idea/kotlinc.xml
+.idea/misc.xml
+.idea/*.xml
 /captures
 .externalNativeBuild
 .cxx
+build-logic/convention/build
 local.properties
