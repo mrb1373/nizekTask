@@ -33,7 +33,7 @@ class ProductSearchViewModel @Inject constructor(
 
     @OptIn(FlowPreview::class)
     private suspend fun searchApi() {
-        searchQuery.debounce(100).collectLatest {
+        searchQuery.debounce(500).collectLatest {
             if (it.isNotBlank() && it.isNotEmpty()) {
                 productSearchRepository.searchProduct(it).apply {
                     onSuccess {

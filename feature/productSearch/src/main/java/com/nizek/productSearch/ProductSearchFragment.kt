@@ -13,8 +13,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nizek.common.hide
 import com.nizek.common.show
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,9 +44,20 @@ class ProductSearchFragment : Fragment() {
         searchField = view.findViewById(R.id.searchField)
         recyclerView = view.findViewById(R.id.productList)
         recyclerView.adapter = productAdapter
+        recyclerView.layoutManager = provideGridLayoutManager()
         progressIndicator = view.findViewById(R.id.progressIndicator)
         searchField.doOnTextChanged { text, _, _, _ ->
             viewModel.search(text.toString())
+        }
+    }
+
+    private fun provideGridLayoutManager(): GridLayoutManager {
+        return GridLayoutManager(requireContext(), 2).apply {
+            spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    return if (position % 3 == 0) 2 else 1
+                }
+            }
         }
     }
 

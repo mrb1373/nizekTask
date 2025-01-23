@@ -1,6 +1,5 @@
 package com.nizek.productSearch
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,9 +20,7 @@ class ProductSearchAdapter :
         fun bind(product: Product) {
             productName.text = product.title
             Picasso.get()
-                .load(product.thumbnail)
-                .centerCrop()
-                .resize(64, 64)
+                .load(product.images.first())
                 .into(productImage)
 
         }
